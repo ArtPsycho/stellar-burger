@@ -13,7 +13,7 @@ import {
 import '../../index.css';
 import styles from './app.module.css';
 
-import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
+import { AppHeader, IngredientDetails, OrderInfo, Modal } from '@components';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
@@ -25,7 +25,7 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const background = location.state?.backgound;
+  const backgroundLocation = location.state?.background;
 
   useEffect(() => {
     dispatch(authCheckUser());
@@ -35,7 +35,7 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={background || location}>
+      <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
@@ -98,7 +98,7 @@ const App = () => {
         />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
-      {background && (
+      {backgroundLocation && (
         <Routes>
           <Route
             path='/feed/:number'

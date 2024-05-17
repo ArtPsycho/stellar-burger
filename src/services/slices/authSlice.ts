@@ -15,16 +15,9 @@ import { deleteCookie, setCookie, getCookie } from '../../utils/cookie';
 
 export const authCheckUser = createAsyncThunk(
   'user/authCheckUser',
-  async (_, { dispatch, rejectWithValue }) => {
+  async (_, { dispatch }) => {
     if (getCookie('accessToken')) {
-      getUserApi()
-        .then((res) => {
-          dispatch(checkUser(res.user));
-        })
-        .catch((err) => {
-          rejectWithValue(err);
-        })
-        .finally(() => dispatch(authCheck()));
+      getUserApi().finally(() => dispatch(authCheck()));
     } else {
       dispatch(authCheck());
     }
