@@ -31,9 +31,16 @@ describe('Сonstructor page', () => {
       // Имитируем нажатие на кнопку "Войти"
       cy.get('#login-submit').click();
 
-      cy.intercept('POST', '*/orders', { fixture: 'order.json' });
+      cy.wait(5000);
+
+      cy.intercept('POST', '*/orders', { fixture: 'order.json' }).as('orderRequest');
+
+      cy.log('Перехвачен запрос к /orders');
       cy.addIngredients('@bun', '@filling');
+      
       cy.contains('Оформить').click();
+      cy.wait('@orderRequest');
+
       cy.get('#modals').contains('40743');
       cy.get('#modals').find('button').click();
       cy.get('#modals').children().should('not.exist');
