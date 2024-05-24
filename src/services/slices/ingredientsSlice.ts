@@ -1,6 +1,7 @@
-import { TIngredient } from '@utils-types';
+import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '../../utils/burger-api';
+import { PayloadAction } from '@reduxjs/toolkit';
 
 export const getIngredients = createAsyncThunk(
   'ingredients/getIngredients',
@@ -22,7 +23,17 @@ const initialState: TIngredientsState = {
 const getIngredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
-  reducers: {},
+  reducers: {
+    loadIngredients: (state) => {
+      state.isLoading = false;
+    },
+    loadIngredientsAdded: (
+      state,
+      { payload }: PayloadAction<TConstructorIngredient>
+    ) => {
+      state.ingredients.push(payload);
+    }
+  },
   selectors: {
     selectIngredients: (state) => state,
     selectIngredientsLoading: (state) => state.isLoading
@@ -48,3 +59,5 @@ const getIngredientsSlice = createSlice({
 export const reducerIngredients = getIngredientsSlice.reducer;
 export const { selectIngredients, selectIngredientsLoading } =
   getIngredientsSlice.selectors;
+export const { loadIngredients, loadIngredientsAdded } =
+  getIngredientsSlice.actions;

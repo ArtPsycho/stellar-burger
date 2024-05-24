@@ -7,7 +7,9 @@ import { getBurger, orderReset } from '../../services/slices/orderSlice';
 import { clearConstructor } from '../../services/slices/constructorSlice';
 
 export const BurgerConstructor: FC = () => {
-  const constructorItems = useSelector((store) => store.constructorBurger);
+  const constructorItems = useSelector(
+    (store) => store.constructorBurger.constructorItems
+  );
   const orderRequest = useSelector((store) => store.order.orderRequest);
   const orderModalData = useSelector((store) => store.order.orderModalData);
   const navigate = useNavigate();
@@ -25,7 +27,7 @@ export const BurgerConstructor: FC = () => {
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
     const orderData = [
-      constructorItems.bun._id,
+      constructorItems.bun?._id,
       ...ingredients,
       constructorItems.bun._id
     ];

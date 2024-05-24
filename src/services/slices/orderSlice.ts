@@ -6,7 +6,7 @@ import {
 } from '../../utils/burger-api';
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { TOrder, TOrdersData } from '@utils-types';
+import { TOrder, TOrdersData } from '../../utils/types';
 
 export const getFeeds = createAsyncThunk('order/getFeeds', getFeedsApi);
 
@@ -19,7 +19,7 @@ export const getOrderByNumber = createAsyncThunk(
   getOrderByNumberApi
 );
 
-type TOrderState = {
+export type TOrderState = {
   feed: TOrdersData | null;
   orderData: TOrder[];
   orderRequest: boolean;
@@ -29,7 +29,11 @@ type TOrderState = {
 };
 
 const initialState: TOrderState = {
-  feed: null,
+  feed: {
+    orders: [],
+    total: 0,
+    totalToday: 0
+  },
   orderData: [],
   orderRequest: false,
   orderModalData: null,

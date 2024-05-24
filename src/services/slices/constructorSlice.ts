@@ -3,14 +3,22 @@ import { TConstructorIngredient } from '@utils-types';
 import { TIngredient } from '@utils-types';
 import { v4 as uuidv4 } from 'uuid';
 
-type TConstructorState = {
-  bun: TConstructorIngredient | null;
-  ingredients: TConstructorIngredient[];
+export type TConstructorState = {
+  constructorItems: {
+    bun: TConstructorIngredient | null;
+    ingredients: TConstructorIngredient[];
+  };
+  isLoading: boolean;
+  error: string | null;
 };
 
 const initialState: TConstructorState = {
-  bun: null,
-  ingredients: []
+  constructorItems: {
+    bun: null,
+    ingredients: []
+  },
+  isLoading: false,
+  error: null
 };
 
 const constructorBurgerSlice = createSlice({
@@ -20,9 +28,9 @@ const constructorBurgerSlice = createSlice({
     addIngredients: {
       reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         if (action.payload.type === 'bun') {
-          state.bun = action.payload;
+          state.constructorItems.bun = action.payload;
         } else {
-          state.ingredients.push(action.payload);
+          state.constructorItems.ingredients.push(action.payload);
         }
       },
       prepare: (ingredient: TIngredient) => {
@@ -34,21 +42,22 @@ const constructorBurgerSlice = createSlice({
     removeIngredient: (state, action) => {
       if (action.payload.type !== 'bun') {
         const idToRemove = action.payload._id;
-        const indexToRemove = state.ingredients.findIndex(
+        const indexToRemove = state.constructorItems.ingredients.findIndex(
           (ingredient) => ingredient._id === idToRemove
         );
 
         if (indexToRemove !== -1) {
-          state.ingredients.splice(indexToRemove, 1);
+          state.constructorItems.ingredients.splice(indexToRemove, 1);
         }
       }
     },
 
     moveUpIngredient: (state, { payload }: PayloadAction<number>) => {
-      const currentIngredient = state.ingredients[payload];
-      const neighbourIngredient = state.ingredients[payload + 1];
+      const currentIngredient = state.constructorItems.ingredients[payload];
+      const neighbourIngredient =
+        state.constructorItems.ingredients[payload + 1];
 
-      state.ingredients.splice(
+      state.constructorItems.ingredients.splice(
         payload,
         2,
         neighbourIngredient,
@@ -57,11 +66,12 @@ const constructorBurgerSlice = createSlice({
     },
 
     moveDownIngredient: (state, { payload }: PayloadAction<number>) => {
-      const currentIngredient = state.ingredients[payload];
+      const currentIngredient = state.constructorItems.ingredients[payload];
 
-      const neighbourIngredient = state.ingredients[payload - 1];
+      const neighbourIngredient =
+        state.constructorItems.ingredients[payload - 1];
 
-      state.ingredients.splice(
+      state.constructorItems.ingredients.splice(
         payload - 1,
         2,
         currentIngredient,
@@ -70,8 +80,8 @@ const constructorBurgerSlice = createSlice({
     },
 
     clearConstructor: (state) => {
-      state.bun = null;
-      state.ingredients = [];
+      state.constructorItems.bun = null;
+      state.constructorItems.ingredients = [];
     }
   }
 });

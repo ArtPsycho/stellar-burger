@@ -10,7 +10,7 @@ import {
   getUserApi,
   updateUserApi,
   logoutApi
-} from '@api';
+} from '../../utils/burger-api';
 import { deleteCookie, setCookie, getCookie } from '../../utils/cookie';
 
 export const authCheckUser = createAsyncThunk(
